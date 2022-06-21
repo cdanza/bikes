@@ -48,5 +48,18 @@ ggplot(df, aes(sample = cnt))  +
         panel.grid.minor.y = element_blank())
 
 # Correlations
-cor(df$cnt, df$windspeed)
+cor(df$cnt, df$hum)
 
+# Scatter of (x) and cnt
+ggplot(df, aes(x = hum, y =  cnt))  +
+  geom_point() +
+  theme_bw() + 
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.y = element_blank())
+
+# Hist of windspeed to check normality
+ggplot(df, aes(x = temp))  +
+  geom_histogram(binwidth = .01) +
+  theme_bw() + 
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.y = element_blank())
