@@ -25,10 +25,8 @@ ggplot(data = df, mapping = aes(x = registered)) +
        y = "Count") +
   theme_bw()
 
-#TESTING:
-
 # Total Count histogram
-# ~roughly normal distribution with 1000 bin width, tri-modal zooming in
+# ~ roughly normal distribution with 1000 bin width, tri-modal zooming in
 ggplot(data = df, mapping = aes(x = cnt)) +
   geom_histogram(binwidth = 1000) +
   labs(title = "Distribution of Total Bikes Rented by Day",
@@ -49,6 +47,10 @@ ggplot(df, aes(sample = cnt))  +
 
 # Correlations
 cor(df$cnt, df$hum)
+cor(df$cnt, df$temp)
+cor(df$cnt, df$windspeed)
+cor(df$cnt, df$weathersit)
+cor(df$cnt, df$mnth)
 
 # Scatter of (x) and cnt
 ggplot(df, aes(x = hum, y =  cnt))  +
@@ -57,9 +59,48 @@ ggplot(df, aes(x = hum, y =  cnt))  +
   theme(panel.grid.major.x = element_blank(),
         panel.grid.minor.y = element_blank())
 
-# Hist of windspeed to check normality
-ggplot(df, aes(x = temp))  +
+ggplot(df, aes(x = temp, y =  cnt))  +
+  geom_point() +
+  theme_bw() + 
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.y = element_blank())
+
+ggplot(df, aes(x = windspeed, y =  cnt))  +
+  geom_point() +
+  theme_bw() + 
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.y = element_blank())
+
+ggplot(df, aes(x = weathersit, y =  cnt))  +
+  geom_point() +
+  theme_bw() + 
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.y = element_blank())
+
+ggplot(df, aes(x = mnth, y =  cnt))  +
+  geom_point() +
+  theme_bw() + 
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.y = element_blank())
+
+# Histogram of (x) to check normality
+ggplot(df, aes(x = hum))  +
   geom_histogram(binwidth = .01) +
   theme_bw() + 
   theme(panel.grid.major.x = element_blank(),
         panel.grid.minor.y = element_blank())
+
+# Linear models: Backward stepwise regression -- lm3 is best fit
+lm1 <- lm(cnt ~ hum + temp + windspeed + weathersit + mnth + holiday + weekday + workingday, df)
+summary(lm1)
+
+lm2 <- lm(cnt ~ hum + temp + windspeed + weathersit + mnth + weekday, df)
+summary(lm2)
+
+lm3 <- lm(cnt ~ hum + temp + windspeed + weathersit + mnth + weekday + holiday, df)
+summary(lm3)
+
+lm4 <- lm(cnt ~ hum + temp + windspeed + weathersit + mnth + weekday + workingday, df)
+summary(lm4)
+
+
