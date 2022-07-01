@@ -53,9 +53,19 @@ cor(df$cnt, df$weathersit)
 cor(df$cnt, df$mnth)
 
 # Scatter of (x) and cnt
+pairs(~cnt + hum + temp + windspeed, data = df)
+
+ggplot(df, aes(x = ., y = cnt)) +
+  geom_point() +
+  theme_bw() +
+  facet_wrap(~ windspeed, scales = "free_x", strip.position = "bottom") +
+  theme(strip.background = element_blank(),
+        strip.placement = "outside") +
+  labs(x = NULL)
+
 ggplot(df, aes(x = hum, y =  cnt))  +
   geom_point() +
-  theme_bw() + 
+  theme_bw() +
   theme(panel.grid.major.x = element_blank(),
         panel.grid.minor.y = element_blank())
 
@@ -103,4 +113,16 @@ summary(lm3)
 lm4 <- lm(cnt ~ hum + temp + windspeed + weathersit + mnth + weekday + workingday, df)
 summary(lm4)
 
+# Plot lm3
+plot(lm3)
 
+# Predicted vs Actual values plot
+df$predicted <- lm3$fitted.values
+
+ggplot(df, aes(x = cnt, y = predicted)) +
+  geom_point() +
+  geom_abline(intercept=0, slope=1) +
+  labs(x='Actual',
+       y='Predicted',
+       title='Predicted vs. Actual Values') +
+  theme_bw()
